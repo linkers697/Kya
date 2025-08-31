@@ -672,64 +672,6 @@ async def remove_banned_user(user_id: int):
         return
     return await blockeddb.delete_one({"user_id": user_id})
 
-async def get_group_stats(chat_id: int) -> dict:
-    """Get group statistics including song count, user count, etc."""
-    stats = groupstats.get(chat_id)
-    if not stats:
-        db_stats = await groupstatsdb.find_one({"chat_id": chat_id})
-        if not db_stats:
-            # Initialize new group stats
-            stats = {
-                "chat_id": chat_id,
-                "songs_played": 0,
-                "total_users": 0,
-                "chat_title": "",
-                "last_played": None
-            }
-            groupstats[chat_id] = stats
-            await groupstatsdb.insert_one(stats)
-            return stats
-        else:
-            groupstats[chat_id] = db_stats
-            return db_stats
-    return stats
-
-async def increment_song_count(chat_id: int, chat_title: str = ""):
-    """Increment song count for a group"""
-    stats = await get_group_stats(chat_id)
-    stats["songs_played"] += 1
-    stats["last_played"] = datetime.now()
-    if chat_title:
-        stats["chat_title"] = chat_title
-    
-    groupstats[chat_id] = stats
-    await groupstatsdb.update_one(
-        {"chat_id": chat_id},
-        {"$set": stats},
-        upsert=True
-    )
-
-async def update_group_user_count(chat_id: int, user_count: int, chat_title: str = ""):
-    """Update user count for a group"""
-    stats = await get_group_stats(chat_id)
-    stats["total_users"] = user_count
-    if chat_title:
-        stats["chat_title"] = chat_title
-    
-    groupstats[chat_id] = stats
-    await groupstatsdb.update_one(
-        {"chat_id": chat_id},
-        {"$set": stats},
-        upsert=True
-    )
-
-async def get_top_groups(limit: int = 10) -> list:
-    """Get top groups by song count"""
-    cursor = groupstatsdb.find({"chat_id": {"$lt": 0}}).sort("songs_played", -1).limit(limit)
-    top_groups = []
-    async for group in cursor:
-        top_groups.append(group)
-    return top_groups
 
 
 async def get_top_groups_by_requests(limit: int = 10) -> list:
@@ -747,4 +689,55 @@ async def get_group_request_stats(chat_id: int) -> dict:
     """Get detailed stats for a specific group"""
     return await songrequestdb.find_one({"chat_id": chat_id})
 
+async def get_top_users_global(limit: int = 10) -> list:
+    """Get top users globally by total song requests"""
+    pipeline = [
+        {"$match": {"chat_id": {"$lt": 0}}},  # Only groups
+        {"$project": {"top_users": 1, "chat_title": 1, "chat_id": 1}},
+        {"$unwind": "$top_users"},
+        {"$group": {
+            "_id": "$top_users.k",  # User ID as key
+            "total_requests": {"$sum": {"$toInt": "$top_users.v"}},  # Sum requests
+            "groups": {"$addToSet": {"chat_id": "$chat_id", "chat_title": "$chat_title"}}
+        }},
+        {"$sort": {"total_requests": -1}},
+        {"$limit": limit}
+    ]
+    
+    top_users = []
+    async for user in songrequestdb.aggregate(pipeline):
+        top_users.append(user)
+    return top_users
 
+async def get_user_stats_detailed(user_id: int) -> dict:
+    """Get detailed stats for a specific user across all groups"""
+    pipeline = [
+        {"$match": {"top_users." + str(user_id): {"$exists": True}}},
+        {"$project": {
+            "chat_id": 1,
+            "chat_title": 1, 
+            "chat_username": 1,
+            "user_requests": "$top_users." + str(user_id)
+        }},
+        {"$sort": {"user_requests": -1}}
+    ]
+    
+    user_groups = []
+    total_requests = 0
+    
+    async for group in songrequestdb.aggregate(pipeline):
+        requests = group.get("user_requests", 0)
+        total_requests += requests
+        user_groups.append({
+            "chat_id": group.get("chat_id"),
+            "chat_title": group.get("chat_title", "Unknown Group"),
+            "chat_username": group.get("chat_username"),
+            "requests": requests
+        })
+    
+    return {
+        "user_id": user_id,
+        "total_requests": total_requests,
+        "groups": user_groups,
+        "group_count": len(user_groups)
+    }
