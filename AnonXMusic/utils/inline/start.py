@@ -20,7 +20,7 @@ def start_panel(_):
                 text=_["S_B_1"], url=f"https://t.me/{app.username}?startgroup=true"
             ),   
 
-            InlineKeyboardButton(text=_["ST_B_3"], callback_data="LG"),
+            InlineKeyboardButton(text="Command", url=f""),
         ],
     ]
     return buttons
