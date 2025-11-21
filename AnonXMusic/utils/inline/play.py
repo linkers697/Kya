@@ -4,8 +4,7 @@ from pyrogram.types import InlineKeyboardButton
 
 from AnonXMusic.utils.formatters import time_to_seconds
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-import config
-from AnonXMusic import app
+
 
 
 
@@ -36,17 +35,17 @@ def stream_markup_timer(_, chat_id, played, dur):
     duration_sec = time_to_seconds(dur)
     percentage = (played_sec / duration_sec) * 100
     anon = math.floor(percentage)
-    
+
     progress_bars = [
         "⚪─────────", "━⚪────────", "━━⚪───────", "━━━⚪──────", "━━━━⚪─────",
         "━━━━━⚪────", "━━━━━━⚪───", "━━━━━━━⚪──", "━━━━━━━━⚪─", "━━━━━━━━━⚪﻿"
     ]
-    
+
     ba = progress_bars[min(anon // 10, 9)]
-##bar of Shraddha---------------------------------------
-    
-    
-    
+##bar of wynk---------------------------------------
+
+
+
     buttons = [
         [
             InlineKeyboardButton(
@@ -56,18 +55,20 @@ def stream_markup_timer(_, chat_id, played, dur):
         ],
         [
             InlineKeyboardButton(text="◁ 20s", callback_data=f"seekback {chat_id} 20"),
-           InlineKeyboardButton(text="❚❚", callback_data=f"ADMIN Pause|{chat_id}"),
-             #InlineKeyboardButton(text="10s", callback_data=f"seek {chat_id} 10"),
+            InlineKeyboardButton(text="10s", callback_data=f"seekback {chat_id} 10"),
+            # InlineKeyboardButton(text="❚❚", callback_data=f"ADMIN Pause|{chat_id}"),
+            InlineKeyboardButton(text="10s", callback_data=f"seek {chat_id} 10"),
             InlineKeyboardButton(text="20s ▷", callback_data=f"seek {chat_id} 20"),
         ],
         [
-            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="ᴄʟᴏꜱᴇ"),       InlineKeyboardButton(
-                text="ʌᴅᴅ ɪᴛ", url=f"https://t.me/{app.username}?startgroup=true"
-            ),   
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"), 
+            InlineKeyboardButton(
+                text="Skip", callback_data=f"ADMIN Skip|{chat_id}"
+            ),
         ],
-        
+
         # [
-        InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="ᴄʟᴏꜱᴇ"), 
+        #     InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"), 
         # ],
     ]
     return buttons
@@ -77,7 +78,7 @@ def stream_markup_timer(_, chat_id, played, dur):
 
 def stream_markup(_, chat_id):
     buttons = [
-        [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="ᴄʟᴏꜱᴇ")],
+        [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close")],
     ]
     return buttons
 
@@ -129,7 +130,8 @@ def slider_markup(_, videoid, user_id, query, query_type, channel, fplay):
             InlineKeyboardButton(
                 text=_["P_B_1"],
                 callback_data=f"MusicStream {videoid}|{user_id}|a|{channel}|{fplay}",
-            ),
+
+),
             InlineKeyboardButton(
                 text=_["P_B_2"],
                 callback_data=f"MusicStream {videoid}|{user_id}|v|{channel}|{fplay}",
