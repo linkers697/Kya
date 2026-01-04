@@ -34,21 +34,22 @@ HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
 # Get it from http://dashboard.heroku.com/account
 HEROKU_API_KEY = getenv("HEROKU_API_KEY")
 
-API_URL = getenv("API_URL", 'https://api2.nexgenbots.xyz') #youtube song url
-VIDEO_API_URL = getenv("VIDEO_API_URL", 'https://api.video.nexgenbots.xyz')
-API_KEY = getenv("API_KEY", "NxGBNexGenBots9a3c06")
+API_URL = getenv("API_URL", 'https://api.nexgenbots.xyz') #youtube song url
+VIDEO_API_URL = getenv("VIDEO_API_URL", 'https://api2.nexgenbots.xyz')
+API_KEY = getenv("API_KEY", 'NxGBNexGenBotsda64ea') # youtube song api key, generate free key or buy paid plan from panel.thequickearn.xyz
+
 
 UPSTREAM_REPO = getenv(
     "UPSTREAM_REPO",
-    "https://github.com/vkm832/Shinemusic",
+    "https://t.me/AuraPromotion",
 )
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "master")
 GIT_TOKEN = getenv(
     "GIT_TOKEN", None
 )  # Fill this variable if your upstream repository is private
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/BotADDA")
-SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/BOTADA")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/AuraVisual")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/friends_hindi_chatting_grp")
 
 # Set this to True if you want the assistant to automatically leave chats after an interval
 AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", False))
@@ -88,21 +89,21 @@ confirmer = {}
 
 
 START_IMG_URL = getenv(
-    "START_IMG_URL", "https://files.catbox.moe/dqz9jk.jpg"
+    "START_IMG_URL", "https://files.catbox.moe/za0dsp.jpg"
 )
 PING_IMG_URL = getenv(
-    "PING_IMG_URL", "https://files.catbox.moe/dqz9jk.jpg"
+    "PING_IMG_URL", "https://files.catbox.moe/za0dsp.jpg"
 )
-PLAYLIST_IMG_URL = "https://files.catbox.moe/hqfslg.jpg"
-STATS_IMG_URL = "https://files.catbox.moe/dqz9jk.jpg"
-TELEGRAM_AUDIO_URL = "https://files.catbox.moe/hqfslg.jpg"
-TELEGRAM_VIDEO_URL = "https://files.catbox.moe/hqfslg.jpg"
-STREAM_IMG_URL = "https://files.catbox.moe/hqfslg.jpg"
-SOUNCLOUD_IMG_URL = "https://files.catbox.moe/j94hws.jpg"
-YOUTUBE_IMG_URL = "https://files.catbox.moe/g25ujr.jpg"
-SPOTIFY_ARTIST_IMG_URL = "https://files.catbox.moe/b4qkig.jpg"
-SPOTIFY_ALBUM_IMG_URL = "https://files.catbox.moe/j94hws.jpg"
-SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/b4qkig.jpg"
+PLAYLIST_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
+STATS_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
+TELEGRAM_AUDIO_URL = "https://files.catbox.moe/za0dsp.jpg"
+TELEGRAM_VIDEO_URL = "https://files.catbox.moe/za0dsp.jpg"
+STREAM_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
+SOUNCLOUD_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
+YOUTUBE_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
+SPOTIFY_ARTIST_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
+SPOTIFY_ALBUM_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
+SPOTIFY_PLAYLIST_IMG_URL = "https://files.catbox.moe/za0dsp.jpg"
 
 
 def time_to_seconds(time):
